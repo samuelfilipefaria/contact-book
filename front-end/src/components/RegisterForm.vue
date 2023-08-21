@@ -41,22 +41,24 @@
     methods: {
       submitUserForm() {
         const requestOptions = {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         };
 
-        axios.post('http://localhost:8000/api.php', this.prepareFormData, requestOptions)
+        axios.post('http://localhost:8000/controller/UserController.class.php', this.prepareFormData, requestOptions)
         .then(response => console.log(response.data) )
         .catch(error => console.log('Ocorreu um erro: ' + error) );
-      },
-
+      }
+    },
+    computed: {
       prepareFormData() {
-        let formData = new FormData();
-        formData.append('name', this.name);
-        formData.append('email', this.email);
-        formData.append('password', this.password);
-        formData.append('photo', this.photo);
+        let params = new URLSearchParams();
+        params.append('_acao', 'cadastrar');
+        params.append('name', this.name);
+        params.append('email', this.email);
+        params.append('password', this.password);
+        params.append('photo', this.photo);
 
-        return formData;
+        return params;
       }
     }
   }

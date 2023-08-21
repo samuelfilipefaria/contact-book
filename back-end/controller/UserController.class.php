@@ -1,4 +1,10 @@
 <?php
+  header('Content-Type: application/json');
+  header('Content-Type: multipart/form-data');
+  header('Content-Type: application/x-www-form-urlencoded');
+  header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
   // model
   require_once '../model/user.php';
   // dao
