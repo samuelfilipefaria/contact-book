@@ -49,7 +49,7 @@
           localStorage.setItem("userEmail", apiResponse.user_data);
           location.reload();
         } else {
-          localStorage.setItem("userEmail", false);
+          localStorage.setItem("userEmail", '');
         }
       }
     },

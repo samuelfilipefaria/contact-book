@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card
-      v-if="userEmail"
+      v-if="userEmail && userEmail != ''"
       border
       class="mb-2"
       density="compact"
@@ -10,7 +10,7 @@
       :title="userEmail"
     >
       <v-card-actions>
-        <v-btn>
+        <v-btn @click="logout">
           <v-icon
             icon="mdi-arrow-left"
             size="18"
@@ -60,6 +60,10 @@
     methods: {
       changeCurrentForm(tabValue) {
         this.currentForm = tabValue == 1 ? RegisterForm : LoginForm;
+      },
+      logout() {
+        localStorage.setItem("userEmail", '');
+        location.reload();
       }
     }
   }
