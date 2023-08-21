@@ -20,6 +20,12 @@
             label="Senha"
             type="password"
           />
+          <v-file-input
+            ref="photoFileInput"
+            @change="onChangeFileUpload()"
+            label="Foto"
+            show-size
+          />
           <v-btn type="submit" block class="mt-2">Cadastrar</v-btn>
         </v-form>
       </v-sheet>
@@ -35,10 +41,13 @@
       name: '',
       email: '',
       password: '',
-      photo: '',
+      photo: [],
       rules: [ value => { return value ? true : 'Não é possível deixar campos vazios!' }, ],
     }),
     methods: {
+      onChangeFileUpload(){
+        this.photo = this.$refs.photoFileInput.files[0];
+      },
       submitUserForm() {
         const requestOptions = {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
