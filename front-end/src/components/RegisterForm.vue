@@ -61,7 +61,12 @@
       setLoginStatus(apiResponse) {
         console.log(apiResponse);
         const loginStatus = apiResponse.status_code == 1 ? true : false;
-        localStorage.setItem("loginStatus", loginStatus);
+        if(loginStatus) {
+          localStorage.setItem("userName", apiResponse.user_data);
+          location.reload();
+        } else {
+          localStorage.setItem("userName", false);
+        }
       }
     },
     computed: {

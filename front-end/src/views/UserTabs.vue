@@ -15,6 +15,7 @@
         :value="n"
       >
         <v-container fluid>
+          <h1 v-if="userEmail">Olá {{ userEmail }}</h1>
           <component :is="currentForm"/>
         </v-container>
       </v-window-item>
@@ -28,7 +29,8 @@
   export default {
     data: () => ({
       tab: null,
-      currentForm: RegisterForm
+      currentForm: RegisterForm,
+      userEmail: localStorage.getItem("loginEmail")
     }),
     components: {
       RegisterForm,
