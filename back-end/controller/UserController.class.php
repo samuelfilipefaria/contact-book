@@ -4,6 +4,7 @@
   header('Content-Type: application/x-www-form-urlencoded');
   header('Access-Control-Allow-Origin: *');
   header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+  session_start();
 
   // model
   require_once '../model/user.php';
@@ -53,6 +54,9 @@
         case 'cadastrar':
           $this->register();
         break;
+        case 'entrar':
+          $this->login();
+        break;
         // poderiam existir outras ações a serem executadas com POST
         default:
           throw new Exception('Ocorreu um erro ao tentar realizar a operação.<br> Ação desconhecida');
@@ -75,17 +79,37 @@
         extract($_POST);
         // variaveis $_acao, $descricao, $categoria e $quantidade
         $user = new User(0, $name, $email, $password, $photo);
-        if (!$this->daoUser->userExists('name', $produto->get('name'))) {
+        if (!$this->daoUser->userExists('name', $user->get('name'))) {
 
           if($this->daoUser->registerUser($user)) {
             echo Utils::buildJSONMessage('Cadastro realizado com sucesso!', 1);
+            $_SESSION['userEmail'] = $email;
           } else {
             echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.', 0);
+            session_destroy();
           }
 
         } else {
           echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.<br>Já existe um usuário com o nome informado.', 0);
         }
+      } catch (Exception $ex) {
+        echo Utils::buildJSONMessage($ex->getMessage(), 0);
+      }
+    }
+
+    public function login() {
+      try {
+        extract($_POST);
+        if (
+          $this->daoUser->userExists('login', $email) &&
+          $this->daoUser->userExists('senha', $password)
+        ) {
+            echo Utils::buildJSONMessage('Login realizado com sucesso!', 1);
+            $_SESSION['userEmail'] = $email;
+          } else {
+            echo Utils::buildJSONMessage('Erro ao tentar realizar o login.', 0);
+            session_destroy();
+          }
       } catch (Exception $ex) {
         echo Utils::buildJSONMessage($ex->getMessage(), 0);
       }

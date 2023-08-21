@@ -38,8 +38,14 @@
         };
 
         axios.post('http://localhost:8000/controller/UserController.class.php', this.prepareFormData, requestOptions)
-        .then(response => console.log(response.data) )
+        .then(response => this.setLoginStatus(response.data) )
         .catch(error => console.log('Ocorreu um erro: ' + error) );
+      },
+
+      setLoginStatus(apiResponse) {
+        console.log(apiResponse);
+        const loginStatus = apiResponse.status_code == 1 ? true : false;
+        localStorage.setItem("loginStatus", loginStatus);
       }
     },
     computed: {
