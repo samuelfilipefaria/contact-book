@@ -1,5 +1,26 @@
 <template>
   <v-card>
+    <v-card
+      v-if="userEmail"
+      border
+      class="mb-2"
+      density="compact"
+      prepend-avatar="https://randomuser.me/api/portraits/women/10.jpg"
+      variant="text"
+      :title="userEmail"
+    >
+      <v-card-actions>
+        <v-btn>
+          <v-icon
+            icon="mdi-arrow-left"
+            size="18"
+            class="mr-2"
+          />
+          Sair
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+
     <v-tabs
       v-model="tab"
       color="deep-purple-accent-4"
@@ -15,7 +36,6 @@
         :value="n"
       >
         <v-container fluid>
-          <h1 v-if="userEmail">Olá {{ userEmail }}</h1>
           <component :is="currentForm"/>
         </v-container>
       </v-window-item>
@@ -30,7 +50,7 @@
     data: () => ({
       tab: null,
       currentForm: RegisterForm,
-      userEmail: localStorage.getItem("loginEmail")
+      userEmail: localStorage.getItem("userEmail")
     }),
     components: {
       RegisterForm,
@@ -44,3 +64,6 @@
     }
   }
 </script>
+
+
+

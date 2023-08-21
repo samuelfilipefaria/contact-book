@@ -83,8 +83,7 @@
 
           if($this->daoUser->registerUser($user)) {
             $_SESSION['userEmail'] = $email;
-            $_SESSION['userName'] = $name;
-            echo Utils::buildJSONMessage('Cadastro realizado com sucesso!', 1, $_SESSION['userName']);
+            echo Utils::buildJSONMessage('Cadastro realizado com sucesso!', 1, $_SESSION['userEmail']);
           } else {
             session_destroy();
             echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.', 0, false);
@@ -106,8 +105,7 @@
           $this->daoUser->userExists('senha', $password)
         ) {
             $_SESSION['userEmail'] = $email;
-            $_SESSION['userName'] = $name;
-            echo Utils::buildJSONMessage('Login realizado com sucesso!', 1, $_SESSION['userName']);
+            echo Utils::buildJSONMessage('Login realizado com sucesso!', 1, $_SESSION['userEmail']);
           } else {
             session_destroy();
             echo Utils::buildJSONMessage('Erro ao tentar realizar o login.', 0, false);

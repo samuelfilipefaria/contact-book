@@ -62,10 +62,10 @@
         console.log(apiResponse);
         const loginStatus = apiResponse.status_code == 1 ? true : false;
         if(loginStatus) {
-          localStorage.setItem("userName", apiResponse.user_data);
+          localStorage.setItem("userEmail", apiResponse.user_data);
           location.reload();
         } else {
-          localStorage.setItem("userName", false);
+          localStorage.setItem("userEmail", false);
         }
       }
     },
