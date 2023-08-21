@@ -7,8 +7,8 @@
    * @return string JSON string format
    */
   class Utils {
-    public static function buildJSONMessage($msg, $code) {
-      return json_encode(array('message' => $msg, 'status_code' => $code));
+    public static function buildJSONMessage($msg, $code, $data = '') {
+      return json_encode(array('message' => $msg, 'status_code' => $code, 'data' => $data));
     }
   }
 ?>
