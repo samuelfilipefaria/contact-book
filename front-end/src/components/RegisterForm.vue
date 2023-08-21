@@ -1,7 +1,7 @@
 <template>
   <v-container class="fill-height">
     <v-responsive class="align-center text-center fill-height">
-      <v-sheet width="300" class="mx-auto">
+      <v-sheet width="300" height="400" class="mx-auto">
         <v-form @submit.prevent="submitUserForm">
           <v-text-field
             v-model="name"
