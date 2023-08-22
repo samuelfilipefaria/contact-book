@@ -28,20 +28,12 @@
     }
 
     public function handleRequest() {
-      //identificando o tipo de requisicao recebida
       switch ($_SERVER['REQUEST_METHOD']) {
         case 'POST':
           if (!isset($_POST['_acao']))
             throw new Exception('Erro ao tentar realizar a operação.<br> Ação não informada');
 
           $this->handlePostRequest($_POST['_acao']);
-        break;
-
-        case 'GET':
-          if (!isset($_GET['_acao']))
-            throw new Exception('Erro ao tentar realizar a operação.<br> Ação não informada');
-
-          $this->handleGetRequest($_GET['_acao']);
         break;
 
         default:
@@ -60,18 +52,10 @@
         case 'deletar':
           $this->delete();
         break;
-        // poderiam existir outras ações a serem executadas com POST
-        default:
-          throw new Exception('Ocorreu um erro ao tentar realizar a operação.<br> Ação desconhecida');
-      }
-    }
-
-    private function handleGetRequest($_acao) {
-      switch($_acao) {
         case 'listar':
           $this->getAllContacts();
         break;
-        // poderiam existir outras ações a serem executadas com GET
+
         default:
           throw new Exception('Ocorreu um erro ao tentar realizar a operação.<br> Ação desconhecida');
       }
@@ -80,7 +64,7 @@
     public function register() {
       try {
         extract($_POST);
-        // variaveis $_acao, $descricao, $categoria e $quantidade
+
         $contact = new Contact(0, $userId, $name, $email, $phone, $photo);
         if (!$this->daoContact->contactExists('name', $contact->get('name'))) {
 
@@ -118,7 +102,13 @@
 
     public function delete() {
       try {
-        echo Utils::buildJSONMessage('Contato excluído com sucesso', 1);
+        extract($_POST);
+
+        if($this->daoContact->deleteContact($contactId)) {
+          echo Utils::buildJSONMessage('Contato deletado com sucesso', 1);
+        } else {
+          echo Utils::buildJSONMessage('Contato NÃO foi deletado com sucesso', 0);
+        }
       } catch (Exception $ex) {
         echo Utils::buildJSONMessage($ex->getMessage(), 0);
       }
