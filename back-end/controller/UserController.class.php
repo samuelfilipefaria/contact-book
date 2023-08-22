@@ -62,7 +62,7 @@
         if (!$this->daoUser->userExists('name', $user->get('name'))) {
 
           if($this->daoUser->registerUser($user)) {
-            echo Utils::buildJSONMessage('Cadastro realizado com sucesso!', 1);
+            echo Utils::buildJSONMessage('Cadastro realizado com sucesso!', 1, $email);
           } else {
             echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.', 0);
           }
