@@ -1,26 +1,5 @@
 <template>
   <v-card>
-    <v-card
-      v-if="userEmail && userEmail != ''"
-      border
-      class="mb-2"
-      density="compact"
-      prepend-avatar="https://randomuser.me/api/portraits/women/10.jpg"
-      variant="text"
-      :title="userEmail"
-    >
-      <v-card-actions>
-        <v-btn @click="logout">
-          <v-icon
-            icon="mdi-arrow-left"
-            size="18"
-            class="mr-2"
-          />
-          Sair
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-
     <v-tabs
       v-model="tab"
       color="deep-purple-accent-4"
@@ -50,7 +29,6 @@
     data: () => ({
       tab: null,
       currentForm: RegisterForm,
-      userEmail: localStorage.getItem("userEmail")
     }),
     components: {
       RegisterForm,
@@ -61,10 +39,6 @@
       changeCurrentForm(tabValue) {
         this.currentForm = tabValue == 1 ? RegisterForm : LoginForm;
       },
-      logout() {
-        localStorage.setItem("userEmail", '');
-        location.reload();
-      }
     }
   }
 </script>
