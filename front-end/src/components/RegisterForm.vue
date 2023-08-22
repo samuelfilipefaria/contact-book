@@ -62,7 +62,7 @@
         console.log(apiResponse);
         const loginStatus = apiResponse.status_code == 1 ? true : false;
         if(loginStatus) {
-          localStorage.setItem("userEmail", apiResponse.user_data);
+          localStorage.setItem("userEmail", apiResponse.response_info);
           location.reload();
         } else {
           localStorage.setItem("userEmail", '');
