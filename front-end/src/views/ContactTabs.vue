@@ -27,7 +27,7 @@
       align-tabs="center"
     >
       <v-tab :value="1" @click="changeCurrentForm(1)">Contatos</v-tab>
-      <v-tab :value="2" @click="changeCurrentForm(2)">Criar/Editar</v-tab>
+      <v-tab :value="2" @click="changeCurrentForm(2)" id="contactFormTab">{{ contactFormTitle }}</v-tab>
     </v-tabs>
     <v-window v-model="tab">
       <v-window-item
@@ -36,7 +36,7 @@
         :value="n"
       >
         <v-container fluid>
-          <component :is="currentForm"/>
+          <component :is="currentForm" :isEdition="isEdition" :contactData="contactData" @editContact="loadEditionForm" @cancelEditionForm="cancelEditionForm"/>
         </v-container>
       </v-window-item>
     </v-window>
@@ -52,6 +52,9 @@
       isEdition: false,
       userEmail: localStorage.getItem("userEmail"),
       currentForm: ContactList,
+      contactFormTitle: "Criar contato",
+      contactId: -1,
+      contactData: {}
     }),
     components: {
       ContactForm,
@@ -66,6 +69,18 @@
         localStorage.setItem("userEmail", '');
         location.reload();
       },
+      loadEditionForm(contact) {
+        this.contactData = contact;
+        this.isEdition = true;
+        this.contactFormTitle = "Editar contato";
+        document.getElementById("contactFormTab").click();
+      },
+      cancelEditionForm() {
+        this.contactData = {};
+        this.isEdition = false;
+        this.contactFormTitle = "Criar contato";
+        document.getElementById("contactFormTab").click();
+      }
     }
   }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-container class="fill-height">
     <v-responsive class="align-center text-center fill-height">
-      <v-sheet width="300" height="400" class="mx-auto">
+      <v-sheet width="300" height="500" class="mx-auto">
         <v-form @submit.prevent="submitContactForm">
           <v-text-field
             v-model="name"
@@ -26,6 +26,7 @@
             show-size
           />
           <v-btn type="submit" block class="mt-2">Enviar</v-btn>
+          <v-btn v-if="editingContact" block class="mt-2" @click="cancelContactEdition">Cancelar edição</v-btn>
         </v-form>
       </v-sheet>
     </v-responsive>
@@ -42,7 +43,18 @@
       phone: '',
       photo: [],
       rules: [ value => { return value ? true : 'Não é possível deixar campos vazios!' }, ],
+      editingContact: false
     }),
+    props: {
+      isEdition: {
+        type: Boolean,
+        required: true
+      },
+      contactData: {
+        type: Object,
+        required: false
+      }
+    },
     methods: {
       onChangeFileUpload(){
         this.photo = this.$refs.photoFileInput.files[0];
@@ -58,7 +70,18 @@
         axios.post('http://localhost:8000/controller/ContactController.class.php', this.prepareFormData, requestOptions)
         .then(response => console.log(response.data) )
         .catch(error => console.log('Ocorreu um erro: ' + error) );
+
+        location.reload();
       },
+
+      cancelContactEdition() {
+        this.$emit('cancelEditionForm');
+
+        this.editingContact = false;
+        this.name = '';
+        this.email = '';
+        this.phone = '';
+      }
     },
     computed: {
       prepareFormData() {
@@ -71,6 +94,19 @@
         params.append('photo', this.photo);
 
         return params;
+      },
+    },
+    mounted() {
+      this.editingContact = this.isEdition;
+
+      if(this.editingContact == true) {
+        this.name = this.contactData.nome;
+        this.email = this.contactData.email;
+        this.phone = this.contactData.telefone;
+      } else {
+        this.name = '';
+        this.email = '';
+        this.phone = '';
       }
     }
   }

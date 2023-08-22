@@ -25,7 +25,7 @@
           />
         </td>
         <td>
-          <v-btn class="mr-2">
+          <v-btn class="mr-2" @click="editContact(contact)">
             <v-icon
               icon="mdi-pencil"
               size="18"
@@ -68,6 +68,10 @@
         axios.post('http://localhost:8000/controller/ContactController.class.php', this.deleteContactParams, this.requestOptions)
         .then(response => this.contacts = response.data )
         .catch(error => console.log('Ocorreu um erro: ' + error) );
+        location.reload();
+      },
+      editContact(contact) {
+        this.$emit('editContact', contact);
       }
     },
     computed: {
