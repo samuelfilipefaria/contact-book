@@ -60,6 +60,32 @@
       return $result;
     }
 
+    public function getUserByEmailAndPassword($email, $password) {
+      $query = "SELECT * FROM usuario WHERE login = :userEmail AND senha = :userPassword";
+      $fields = array('userEmail' => $email, 'userPassword' => $password);
+
+      $result = [];
+      try {
+        $result = $this->getResult($query, $fields);
+      } catch (Exception $ex) {
+        throw new Exception($ex->getMessage());
+      }
+      return $result;
+    }
+
+    public function getLastUser() {
+      $query = "SELECT * FROM usuario ORDER BY usuarioId DESC LIMIT 1";
+      $fields = [];
+
+      $result = [];
+      try {
+        $result = $this->getResult($query, $fields);
+      } catch (Exception $ex) {
+        throw new Exception($ex->getMessage());
+      }
+      return $result;
+    }
+
     public function userExists($field, $value) {
       $query = "SELECT * FROM usuario WHERE $field = :$field";
       $fields = array($field => $value);
