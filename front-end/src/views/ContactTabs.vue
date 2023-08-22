@@ -36,7 +36,7 @@
         :value="n"
       >
         <v-container fluid>
-          <ContactForm/>
+          <component :is="currentForm"/>
         </v-container>
       </v-window-item>
     </v-window>
@@ -44,25 +44,28 @@
 </template>
 <script>
   import ContactForm from '@/components/ContactForm.vue';
+  import ContactList from '@/components/ContactList.vue';
 
   export default {
     data: () => ({
       tab: null,
       isEdition: false,
-      userEmail: localStorage.getItem("userEmail")
+      userEmail: localStorage.getItem("userEmail"),
+      currentForm: ContactList,
     }),
     components: {
-      ContactForm
+      ContactForm,
+      ContactList
     },
 
     methods: {
       changeCurrentForm(tabValue) {
-        console.log('preencher campos' + tabValue);
+        this.currentForm = tabValue == 1 ? ContactList : ContactForm;
       },
       logout() {
         localStorage.setItem("userEmail", '');
         location.reload();
-      }
+      },
     }
   }
 </script>
