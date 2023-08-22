@@ -82,7 +82,7 @@
         extract($_POST);
         // variaveis $_acao, $descricao, $categoria e $quantidade
         $contact = new Contact(0, $userId, $name, $email, $phone, $photo);
-        if (!$this->daoContact->contactExists('name', $user->get('name'))) {
+        if (!$this->daoContact->contactExists('name', $contact->get('name'))) {
 
           if($this->daoContact->registerContact($contact)) {
             echo Utils::buildJSONMessage('Cadastro realizado com sucesso!', 1);
