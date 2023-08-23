@@ -33,7 +33,7 @@
 				break;
 
 				case 'photo':
-				return $this->password;
+				return $this->photo;
 				break;
 
 				default:

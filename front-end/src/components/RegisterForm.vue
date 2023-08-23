@@ -50,7 +50,7 @@
       },
       submitUserForm() {
         const requestOptions = {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: { 'Content-Type': 'multipart/form-data' },
         };
 
         axios.post('http://localhost:8000/controller/UserController.class.php', this.prepareFormData, requestOptions)
@@ -71,7 +71,7 @@
     },
     computed: {
       prepareFormData() {
-        let params = new URLSearchParams();
+        let params = new FormData();
         params.append('_acao', 'cadastrar');
         params.append('name', this.name);
         params.append('email', this.email);
