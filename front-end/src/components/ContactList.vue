@@ -19,7 +19,7 @@
           <v-card
             class="mb-2"
             density="compact"
-            prepend-avatar="https://randomuser.me/api/portraits/women/10.jpg"
+            :prepend-avatar="'http://localhost:8000' + contact.foto"
             variant="text"
             :title="contact.nome"
           />

@@ -78,7 +78,7 @@
           .catch(error => console.log('Ocorreu um erro: ' + error) );
         }
 
-        // location.reload();
+        location.reload();
       },
 
       cancelContactEdition() {

@@ -104,10 +104,14 @@
       try {
         extract($_POST);
 
-        if($this->daoContact->updateContact($name, $phone, $email, $photo, $contactId)) {
-          echo Utils::buildJSONMessage('Contato atualizado com sucesso', 1);
-        } else {
-          echo Utils::buildJSONMessage('Contato NÃO atualizado com sucesso', 0);
+        if(move_uploaded_file($_FILES["photo"]["tmp_name"], "../uploads/contact_photos/".$email)) {
+
+          $photo = "/uploads/contact_photos/$email";
+          if($this->daoContact->updateContact($name, $phone, $email, $photo, $contactId)) {
+            echo Utils::buildJSONMessage('Contato atualizado com sucesso', 1);
+          } else {
+            echo Utils::buildJSONMessage('Contato NÃO atualizado com sucesso', 0);
+          }
         }
       } catch (Exception $ex) {
         echo Utils::buildJSONMessage("tessteeee", 0);
