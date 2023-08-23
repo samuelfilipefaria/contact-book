@@ -38,6 +38,7 @@
 
   export default {
     data: () => ({
+      id: -1,
       name: '',
       email: '',
       phone: '',
@@ -60,31 +61,36 @@
         this.photo = this.$refs.photoFileInput.files[0];
       },
       submitContactForm() {
-
         const requestOptions = {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         };
 
-        console.log(requestOptions);
-        console.log(this.prepareFormData);
-        axios.post('http://localhost:8000/controller/ContactController.class.php', this.prepareFormData, requestOptions)
-        .then(response => console.log(response.data) )
-        .catch(error => console.log('Ocorreu um erro: ' + error) );
+        if(this.editingContact) {
+          axios.post('http://localhost:8000/controller/ContactController.class.php', this.editParams, requestOptions)
+          .then(response => console.log(response.data) )
+          .catch(error => console.log('Ocorreu um erro: ' + error) );
+        } else {
+          console.log(this.createParams);
+          axios.post('http://localhost:8000/controller/ContactController.class.php', this.createParams, requestOptions)
+          .then(response => console.log(response.data) )
+          .catch(error => console.log('Ocorreu um erro: ' + error) );
+        }
 
-        location.reload();
+        // location.reload();
       },
 
       cancelContactEdition() {
         this.$emit('cancelEditionForm');
 
         this.editingContact = false;
+        this.id = -1;
         this.name = '';
         this.email = '';
         this.phone = '';
       }
     },
     computed: {
-      prepareFormData() {
+      createParams() {
         let params = new FormData();
         params.append('_acao', 'cadastrar');
         params.append('name', this.name);
@@ -95,15 +101,29 @@
 
         return params;
       },
+      editParams() {
+        let params = new FormData();
+        params.append('_acao', 'editar');
+        params.append('name', this.name);
+        params.append('phone', this.phone);
+        params.append('email', this.email);
+        params.append('photo', this.photo);
+        params.append('contactId', this.id);
+
+        return params;
+      },
     },
     mounted() {
       this.editingContact = this.isEdition;
 
       if(this.editingContact == true) {
+        this.id = this.contactData.idContato;
+        this.userId = this.contactData.idUsuario;
         this.name = this.contactData.nome;
         this.email = this.contactData.email;
         this.phone = this.contactData.telefone;
       } else {
+        this.id = -1;
         this.name = '';
         this.email = '';
         this.phone = '';

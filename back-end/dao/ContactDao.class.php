@@ -99,12 +99,25 @@
       return $result;
     }
 
-    public function updateContact($fields_to_update, $id) {
-      $query = $this->buildUpdateQuery($fields_to_update);
+    public function updateContact($name, $phone, $email, $photo, $contactId) {
+      $query = "
+        UPDATE contato SET
+          nome = :name,
+          telefone = :phone,
+          email = :email,
+          foto = :photo
+          WHERE idContato = :contactId
+      ";
 
-      $fields = [...$fields_to_update, 'idContato' => $id];
+      $fields = array(
+        'name' => $name,
+        'phone' => $phone,
+        'email' => $email,
+        'photo' => $photo,
+        'contactId' => $contactId
+      );
+
       $result = 0;
-
       try {
         $result = $this->getResult($query, $fields);
       } catch (Exception $ex) {
