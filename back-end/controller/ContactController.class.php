@@ -10,6 +10,7 @@
   require_once '../model/contact.php';
   // dao
   require_once '../dao/ContactDao.class.php';
+  require_once '../dao/UserDao.class.php';
   // Utils
   require_once 'Utils.class.php';
 
@@ -22,9 +23,11 @@
 
   class ContactController {
     private $daoContact;
+    private $daoUser;
 
     public function __construct() {
       $this->daoContact = new ContactDao();
+      $this->daoUser = new UserDao();
     }
 
     public function handleRequest() {
@@ -65,17 +68,22 @@
       try {
         extract($_POST);
 
-        $contact = new Contact(0, $userId, $name, $email, $phone, $photo);
-        if (!$this->daoContact->contactExists('name', $contact->get('name'))) {
+        if(move_uploaded_file($_FILES["photo"]["tmp_name"], "../uploads/contact_photos/".$email)) {
 
-          if($this->daoContact->registerContact($contact)) {
-            echo Utils::buildJSONMessage('Cadastro realizado com sucesso!', 1);
+          $userId = $this->daoUser->getUserByEmail($userEmail)[0]["idUsuario"];
+          $photo = "/uploads/contact_photos/$email";
+          $contact = new Contact(0, $userId, $name, $email, $phone, $photo);
+          if (!$this->daoContact->contactExists('name', $contact->get('name'))) {
+
+            if($this->daoContact->registerContact($contact)) {
+              echo Utils::buildJSONMessage('Cadastro realizado com sucesso!', 1);
+            } else {
+              echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.', 0);
+            }
+
           } else {
-            echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.', 0);
+            echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.<br>Já existe um contato com o nome informado.', 0);
           }
-
-        } else {
-          echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.<br>Já existe um contato com o nome informado.', 0);
         }
       } catch (Exception $ex) {
         echo Utils::buildJSONMessage($ex->getMessage(), 0);

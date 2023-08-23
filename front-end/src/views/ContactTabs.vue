@@ -91,7 +91,7 @@
       };
 
       axios.post('http://localhost:8000/controller/UserController.class.php', this.params, requestOptions)
-        .then(response => this.userPhoto += response.data[0].foto )
+        .then(response => { this.userPhoto += response.data[0].foto } )
         .catch(error => console.log('Ocorreu um erro: ' + error) );
     },
     computed: {

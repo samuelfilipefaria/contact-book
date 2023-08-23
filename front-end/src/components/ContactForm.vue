@@ -39,6 +39,7 @@
   export default {
     data: () => ({
       id: -1,
+      userId: -1,
       name: '',
       email: '',
       phone: '',
@@ -62,15 +63,16 @@
       },
       submitContactForm() {
         const requestOptions = {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          headers: { 'Content-Type': 'multipart/form-data' }
         };
 
         if(this.editingContact) {
+          console.log(this.editParams.get("photo"));
+
           axios.post('http://localhost:8000/controller/ContactController.class.php', this.editParams, requestOptions)
           .then(response => console.log(response.data) )
           .catch(error => console.log('Ocorreu um erro: ' + error) );
         } else {
-          console.log(this.createParams);
           axios.post('http://localhost:8000/controller/ContactController.class.php', this.createParams, requestOptions)
           .then(response => console.log(response.data) )
           .catch(error => console.log('Ocorreu um erro: ' + error) );
@@ -84,17 +86,19 @@
 
         this.editingContact = false;
         this.id = -1;
+        this.userId = -1;
         this.name = '';
         this.email = '';
         this.phone = '';
+        this.photo = [];
       }
     },
     computed: {
       createParams() {
         let params = new FormData();
         params.append('_acao', 'cadastrar');
+        params.append('userEmail', localStorage.getItem("userEmail"));
         params.append('name', this.name);
-        params.append('userId', 20);
         params.append('email', this.email);
         params.append('phone', this.phone);
         params.append('photo', this.photo);
@@ -105,8 +109,8 @@
         let params = new FormData();
         params.append('_acao', 'editar');
         params.append('name', this.name);
-        params.append('phone', this.phone);
         params.append('email', this.email);
+        params.append('phone', this.phone);
         params.append('photo', this.photo);
         params.append('contactId', this.id);
 
@@ -114,6 +118,8 @@
       },
     },
     mounted() {
+      console.log(this.contactData.nome);
+
       this.editingContact = this.isEdition;
 
       if(this.editingContact == true) {
@@ -122,11 +128,14 @@
         this.name = this.contactData.nome;
         this.email = this.contactData.email;
         this.phone = this.contactData.telefone;
+        this.photo = this.contactData.foto;
       } else {
         this.id = -1;
+        this.userId = '';
         this.name = '';
         this.email = '';
         this.phone = '';
+        this.photo = '';
       }
     }
   }

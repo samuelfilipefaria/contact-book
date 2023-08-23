@@ -39,7 +39,7 @@
 				break;
 
 				case 'photo':
-				return $this->phone;
+				return $this->photo;
 				break;
 
 				default:
