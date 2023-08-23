@@ -34,7 +34,7 @@
       $fields = array(
                 'name' => $user->get('name'),
                 'email' => $user->get('email'),
-                'password' => $user->get('password'),
+                'password' => md5($user->get('password')),
                 'photo' => $user->get('photo')
               );
 

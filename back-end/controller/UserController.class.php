@@ -87,7 +87,7 @@
         extract($_POST);
         if (
           $this->daoUser->userExists('login', $email) &&
-          $this->daoUser->userExists('senha', $password)
+          $this->daoUser->userExists('senha', md5($password))
         ) {
             echo Utils::buildJSONMessage('Login realizado com sucesso!', 1, $email);
           } else {
