@@ -49,6 +49,9 @@
         case 'entrar':
           $this->login();
         break;
+        case 'carregar':
+          $this->loadUser();
+        break;
         default:
           throw new Exception('Ocorreu um erro ao tentar realizar a operação.<br> Ação desconhecida');
       }
@@ -60,14 +63,14 @@
 
         if(move_uploaded_file($_FILES["photo"]["tmp_name"], "../uploads/user_photos/".$email)) {
 
-          $photo = "/back-end/uploads/user_photos/$email";
+          $photo = "/uploads/user_photos/$email";
           $user = new User(0, $name, $email, $password, $photo);
           if (!$this->daoUser->userExists('name', $user->get('name'))) {
 
             if($this->daoUser->registerUser($user)) {
               echo Utils::buildJSONMessage('Cadastro realizado com sucesso!', 1, $email);
             } else {
-              echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.', 0);
+              echo Utils::buildJSONMessage('Erro ao tentar realizar o cadastro.', 0, '');
             }
 
           } else {
@@ -88,8 +91,19 @@
         ) {
             echo Utils::buildJSONMessage('Login realizado com sucesso!', 1, $email);
           } else {
-            echo Utils::buildJSONMessage('Erro ao tentar realizar o login.', 0);
+            echo Utils::buildJSONMessage('Erro ao tentar realizar o login.', '');
           }
+      } catch (Exception $ex) {
+        echo Utils::buildJSONMessage($ex->getMessage(), 0);
+      }
+    }
+
+    public function loadUser() {
+      extract($_POST);
+
+      try {
+        $user = $this->daoUser->getUserByEmail($userEmail);
+        echo json_encode($user);
       } catch (Exception $ex) {
         echo Utils::buildJSONMessage($ex->getMessage(), 0);
       }

@@ -60,9 +60,9 @@
       return $result;
     }
 
-    public function getUserByEmailAndPassword($email, $password) {
-      $query = "SELECT * FROM usuario WHERE login = :userEmail AND senha = :userPassword";
-      $fields = array('userEmail' => $email, 'userPassword' => $password);
+    public function getUserByEmail($userEmail) {
+      $query = "SELECT * FROM usuario WHERE login = :userEmail";
+      $fields = array('userEmail' => $userEmail);
 
       $result = [];
       try {

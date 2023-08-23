@@ -5,7 +5,7 @@
       border
       class="mb-2"
       density="compact"
-      prepend-avatar="https://randomuser.me/api/portraits/women/10.jpg"
+      :prepend-avatar="userPhoto"
       variant="text"
       :title="userEmail"
     >
@@ -43,6 +43,8 @@
   </v-card>
 </template>
 <script>
+  import axios from 'axios'
+
   import ContactForm from '@/components/ContactForm.vue';
   import ContactList from '@/components/ContactList.vue';
 
@@ -54,7 +56,8 @@
       currentForm: ContactList,
       contactFormTitle: "Criar contato",
       contactId: -1,
-      contactData: {}
+      contactData: {},
+      userPhoto: 'http://localhost:8000'
     }),
     components: {
       ContactForm,
@@ -81,6 +84,24 @@
         this.contactFormTitle = "Criar contato";
         document.getElementById("contactFormTab").click();
       }
+    },
+    mounted() {
+      const requestOptions = {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      };
+
+      axios.post('http://localhost:8000/controller/UserController.class.php', this.params, requestOptions)
+        .then(response => this.userPhoto += response.data[0].foto )
+        .catch(error => console.log('Ocorreu um erro: ' + error) );
+    },
+    computed: {
+      params() {
+        let params = new FormData();
+        params.append('_acao', 'carregar');
+        params.append('userEmail', this.userEmail);
+
+        return params;
+      },
     }
   }
 </script>
